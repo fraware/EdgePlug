@@ -1,0 +1,285 @@
+name: ML Model Build Pipeline
+
+on:
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # Allow manual triggers
+  push:
+    paths:
+      - 'models/**'
+      - '.github/workflows/ml_build.yml'
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        cd models/voltage_event
+        pip install -r requirements.txt
+        
+    - name: Run data preparation
+      run: |
+        cd models/voltage_event
+        python -c "
+        import nbformat
+        from nbconvert.preprocessors import ExecutePreprocessor
+        import os
+        
+        # Execute data preparation notebook
+        with open('notebooks/01_data_preparation.ipynb') as f:
+            nb = nbformat.read(f, as_version=4)
+        
+        ep = ExecutePreprocessor(timeout=600, kernel_name='python3')
+        ep.preprocess(nb, {'metadata': {'path': 'notebooks/'}})
+        
+        with open('notebooks/01_data_preparation_executed.ipynb', 'w') as f:
+            nbformat.write(nb, f)
+        "
+        
+    - name: Run model training
+      run: |
+        cd models/voltage_event
+        python -c "
+        import nbformat
+        from nbconvert.preprocessors import ExecutePreprocessor
+        import os
+        
+        # Execute model training notebook
+        with open('notebooks/02_model_training.ipynb') as f:
+            nb = nbformat.read(f, as_version=4)
+        
+        ep = ExecutePreprocessor(timeout=1800, kernel_name='python3')
+        ep.preprocess(nb, {'metadata': {'path': 'notebooks/'}})
+        
+        with open('notebooks/02_model_training_executed.ipynb', 'w') as f:
+            nbformat.write(nb, f)
+        "
+        
+    - name: Run model quantization
+      run: |
+        cd models/voltage_event
+        python -c "
+        import nbformat
+        from nbconvert.preprocessors import ExecutePreprocessor
+        import os
+        
+        # Execute model quantization notebook
+        with open('notebooks/03_model_quantization.ipynb') as f:
+            nb = nbformat.read(f, as_version=4)
+        
+        ep = ExecutePreprocessor(timeout=600, kernel_name='python3')
+        ep.preprocess(nb, {'metadata': {'path': 'notebooks/'}})
+        
+        with open('notebooks/03_model_quantization_executed.ipynb', 'w') as f:
+            nbformat.write(nb, f)
+        "
+        
+    - name: Validate model performance
+      run: |
+        cd models/voltage_event
+        python -c "
+        import json
+        import yaml
+        
+        # Load configuration
+        with open('config/model_spec.yaml', 'r') as f:
+            config = yaml.safe_load(f)
+            
+        # Load quantization results
+        with open('artifacts/quantization_results.json', 'r') as f:
+            results = json.load(f)
+            
+        # Check performance targets
+        quantized = results['quantized']
+        targets = config['performance']
+        
+        accuracy_ok = quantized['accuracy'] >= targets['accuracy_threshold']
+        size_ok = quantized['model_size_kb'] <= targets['model_size_kb']
+        time_ok = quantized['inference_time_ms'] <= targets['inference_time_us'] / 1000
+        
+        print(f'Performance Validation:')
+        print(f'Accuracy: {quantized[\"accuracy\"]:.4f} (target: ≥{targets[\"accuracy_threshold\"]}) - {\"✓\" if accuracy_ok else \"✗\"}')
+        print(f'Model size: {quantized[\"model_size_kb\"]:.1f} KB (target: ≤{targets[\"model_size_kb\"]} KB) - {\"✓\" if size_ok else \"✗\"}')
+        print(f'Inference time: {quantized[\"inference_time_ms\"]:.2f} ms (target: ≤{targets[\"inference_time_us\"]/1000:.2f} ms) - {\"✓\" if time_ok else \"✗\"}')
+        
+        if not all([accuracy_ok, size_ok, time_ok]):
+            raise Exception('Model does not meet performance targets')
+        "
+        
+    - name: Run adversarial robustness test
+      run: |
+        cd models/voltage_event
+        python -c "
+        import numpy as np
+        import tensorflow as tf
+        from tensorflow import keras
+        
+        # Load quantized model
+        model = keras.models.load_model('artifacts/voltage_event_model.h5')
+        X_test = np.load('artifacts/X_test.npy')
+        y_test = np.load('artifacts/y_test.npy')
+        
+        # FGSM adversarial attack
+        def fgsm_attack(model, data, labels, epsilon=0.01):
+            with tf.GradientTape() as tape:
+                tape.watch(data)
+                predictions = model(data)
+                loss = tf.keras.losses.categorical_crossentropy(labels, predictions)
+            
+            gradients = tape.gradient(loss, data)
+            perturbations = epsilon * tf.sign(gradients)
+            adversarial_data = data + perturbations
+            return adversarial_data
+        
+        # Test adversarial robustness
+        epsilon = 0.01
+        adversarial_data = fgsm_attack(model, X_test, tf.one_hot(y_test, 2), epsilon)
+        
+        # Evaluate on adversarial data
+        adv_predictions = model.predict(adversarial_data)
+        adv_accuracy = np.mean(np.argmax(adv_predictions, axis=1) == y_test)
+        
+        print(f'Adversarial robustness test (ε={epsilon}):')
+        print(f'Original accuracy: {np.mean(np.argmax(model.predict(X_test), axis=1) == y_test):.4f}')
+        print(f'Adversarial accuracy: {adv_accuracy:.4f}')
+        
+        # Fail if adversarial accuracy drops too much
+        if adv_accuracy < 0.8:
+            raise Exception(f'Adversarial robustness test failed: accuracy dropped to {adv_accuracy:.4f}')
+        "
+        
+    - name: Generate reproducibility hash
+      run: |
+        cd models/voltage_event
+        python -c "
+        import hashlib
+        import json
+        
+        # Load model metadata
+        with open('artifacts/model_metadata.json', 'r') as f:
+            metadata = json.load(f)
+            
+        # Load quantization results
+        with open('artifacts/quantization_results.json', 'r') as f:
+            quant_results = json.load(f)
+            
+        # Create reproducibility hash
+        hash_input = json.dumps({
+            'model_size': metadata['total_params'],
+            'test_accuracy': metadata['test_accuracy'],
+            'quantized_size': quant_results['quantized']['model_size_kb'],
+            'quantized_accuracy': quant_results['quantized']['accuracy']
+        }, sort_keys=True)
+        
+        reproducibility_hash = hashlib.sha256(hash_input.encode()).hexdigest()[:16]
+        
+        print(f'Reproducibility hash: {reproducibility_hash}')
+        
+        # Save hash for comparison
+        with open('artifacts/reproducibility_hash.txt', 'w') as f:
+            f.write(reproducibility_hash)
+        "
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: voltage-event-model-${{ github.run_number }}
+        path: |
+          models/voltage_event/artifacts/
+          models/voltage_event/notebooks/*_executed.ipynb
+        retention-days: 30
+        
+    - name: Create release
+      if: success()
+      run: |
+        # Create a new release with the trained model
+        gh release create v1.0.${{ github.run_number }} \
+          --title "Voltage Event Model v1.0.${{ github.run_number }}" \
+          --notes "Nightly retrained voltage event detection model" \
+          models/voltage_event/artifacts/voltage_event_model_quantized.tflite \
+          models/voltage_event/artifacts/c_code/voltage_event_model.h \
+          models/voltage_event/artifacts/c_code/voltage_event_model.c
+          
+  test-model:
+    needs: train-model
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download model artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: voltage-event-model-${{ needs.train-model.outputs.run_number }}
+        
+    - name: Test model integration
+      run: |
+        # Test model integration with EdgePlug runtime
+        cd runtime
+        cmake -B build -S .
+        cmake --build build
+        
+        # Run model tests
+        cd build
+        ./test_runtime
+        
+        echo "Model integration test passed"
+        
+    - name: Performance benchmark
+      run: |
+        cd models/voltage_event
+        python -c "
+        import json
+        import time
+        import numpy as np
+        
+        # Load quantized model
+        import tensorflow as tf
+        interpreter = tf.lite.Interpreter(model_path='artifacts/voltage_event_model_quantized.tflite')
+        interpreter.allocate_tensors()
+        
+        # Benchmark inference time
+        input_details = interpreter.get_input_details()
+        output_details = interpreter.get_output_details()
+        
+        # Create dummy input
+        dummy_input = np.random.randn(1, 2, 128).astype(np.float32)
+        
+        # Warm up
+        for _ in range(10):
+            interpreter.set_tensor(input_details[0]['index'], dummy_input)
+            interpreter.invoke()
+            
+        # Benchmark
+        times = []
+        for _ in range(1000):
+            start = time.time()
+            interpreter.set_tensor(input_details[0]['index'], dummy_input)
+            interpreter.invoke()
+            times.append(time.time() - start)
+            
+        avg_time = np.mean(times) * 1000  # Convert to ms
+        p95_time = np.percentile(times, 95) * 1000
+        p99_time = np.percentile(times, 99) * 1000
+        
+        print(f'Performance Benchmark:')
+        print(f'Average inference time: {avg_time:.2f} ms')
+        print(f'95th percentile: {p95_time:.2f} ms')
+        print(f'99th percentile: {p99_time:.2f} ms')
+        
+        # Check if performance targets are met
+        if avg_time > 0.5:  # 500µs target
+            raise Exception(f'Performance target not met: {avg_time:.2f} ms > 0.5 ms')
+        " 

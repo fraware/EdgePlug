@@ -1,0 +1,378 @@
+#!/usr/bin/env python3
+"""
+EdgePlug CLI Updater Tool
+
+This tool deploys agents to EdgePlug devices using gRPC over serial/Ethernet.
+It provides secure agent deployment with manifest verification and rollback capabilities.
+
+Usage:
+    edgeplug-push --device /dev/ttyUSB0 --agent agent.bin --manifest manifest.proto
+    edgeplug-push --device 192.168.1.100:50051 --agent agent.bin --manifest manifest.proto
+"""
+
+import argparse
+import sys
+import os
+import time
+import json
+from typing import Optional, Dict, Any
+import grpc
+import serial
+import struct
+
+# Try to import the generated protobuf
+try:
+    import edgeplug_pb2
+    import edgeplug_pb2_grpc
+except ImportError:
+    print(
+        "Error: edgeplug_pb2 not found. Generate with: protoc --python_out=. edgeplug.proto"
+    )
+    sys.exit(1)
+
+
+class EdgePlugUpdater:
+    """EdgePlug agent deployment tool"""
+
+    def __init__(self, device: str, timeout: int = 30):
+        self.device = device
+        self.timeout = timeout
+        self.serial_conn = None
+        self.grpc_channel = None
+        self.grpc_stub = None
+
+    def connect_serial(self) -> bool:
+        """Connect to device via serial"""
+        try:
+            self.serial_conn = serial.Serial(
+                port=self.device,
+                baudrate=115200,
+                timeout=self.timeout,
+                bytesize=serial.EIGHTBITS,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+            )
+            print(f"Connected to {self.device} via serial")
+            return True
+        except Exception as e:
+            print(f"Failed to connect to {self.device}: {e}")
+            return False
+
+    def connect_grpc(self) -> bool:
+        """Connect to device via gRPC"""
+        try:
+            self.grpc_channel = grpc.insecure_channel(self.device)
+            self.grpc_stub = edgeplug_pb2_grpc.EdgePlugStub(self.grpc_channel)
+            print(f"Connected to {self.device} via gRPC")
+            return True
+        except Exception as e:
+            print(f"Failed to connect to {self.device}: {e}")
+            return False
+
+    def connect(self) -> bool:
+        """Connect to device using appropriate method"""
+        if ":" in self.device:
+            # gRPC connection (IP:port)
+            return self.connect_grpc()
+        else:
+            # Serial connection
+            return self.connect_serial()
+
+    def disconnect(self):
+        """Disconnect from device"""
+        if self.serial_conn:
+            self.serial_conn.close()
+        if self.grpc_channel:
+            self.grpc_channel.close()
+
+    def send_serial_command(self, command: str, data: bytes = b"") -> Optional[bytes]:
+        """Send command via serial"""
+        if not self.serial_conn:
+            return None
+
+        # Create packet: [length][command][data][checksum]
+        packet = struct.pack("<H", len(command) + len(data) + 3)  # length
+        packet += command.encode("ascii")  # command
+        packet += data  # data
+
+        # Calculate checksum
+        checksum = sum(packet) & 0xFF
+        packet += struct.pack("B", checksum)
+
+        # Send packet
+        self.serial_conn.write(packet)
+
+        # Read response
+        try:
+            response_length = struct.unpack("<H", self.serial_conn.read(2))[0]
+            response = self.serial_conn.read(response_length)
+            return response
+        except Exception as e:
+            print(f"Failed to read response: {e}")
+            return None
+
+    def deploy_agent_serial(self, agent_data: bytes, manifest_data: bytes) -> bool:
+        """Deploy agent via serial"""
+        print("Deploying agent via serial...")
+
+        # Send manifest first
+        response = self.send_serial_command("MANIFEST", manifest_data)
+        if not response or response[0] != 0:  # 0 = success
+            print("Failed to send manifest")
+            return False
+
+        # Send agent data
+        response = self.send_serial_command("AGENT", agent_data)
+        if not response or response[0] != 0:  # 0 = success
+            print("Failed to send agent")
+            return False
+
+        # Trigger update
+        response = self.send_serial_command("UPDATE")
+        if not response or response[0] != 0:  # 0 = success
+            print("Failed to trigger update")
+            return False
+
+        print("Agent deployed successfully via serial")
+        return True
+
+    def deploy_agent_grpc(self, agent_data: bytes, manifest_data: bytes) -> bool:
+        """Deploy agent via gRPC"""
+        print("Deploying agent via gRPC...")
+
+        try:
+            # Create deployment request
+            request = edgeplug_pb2.DeployAgentRequest(
+                agent_data=agent_data, manifest_data=manifest_data
+            )
+
+            # Send deployment request
+            response = self.grpc_stub.DeployAgent(request, timeout=self.timeout)
+
+            if response.status == edgeplug_pb2.DEPLOY_STATUS_SUCCESS:
+                print("Agent deployed successfully via gRPC")
+                return True
+            else:
+                print(f"Deployment failed: {response.error_message}")
+                return False
+
+        except Exception as e:
+            print(f"gRPC deployment failed: {e}")
+            return False
+
+    def deploy_agent(self, agent_path: str, manifest_path: str) -> bool:
+        """Deploy agent to device"""
+        # Read agent data
+        try:
+            with open(agent_path, "rb") as f:
+                agent_data = f.read()
+        except Exception as e:
+            print(f"Failed to read agent file: {e}")
+            return False
+
+        # Read manifest data
+        try:
+            with open(manifest_path, "rb") as f:
+                manifest_data = f.read()
+        except Exception as e:
+            print(f"Failed to read manifest file: {e}")
+            return False
+
+        print(f"Agent size: {len(agent_data)} bytes")
+        print(f"Manifest size: {len(manifest_data)} bytes")
+
+        # Deploy using appropriate method
+        if self.grpc_stub:
+            return self.deploy_agent_grpc(agent_data, manifest_data)
+        else:
+            return self.deploy_agent_serial(agent_data, manifest_data)
+
+    def get_device_info(self) -> Optional[Dict[str, Any]]:
+        """Get device information"""
+        if self.grpc_stub:
+            try:
+                request = edgeplug_pb2.GetDeviceInfoRequest()
+                response = self.grpc_stub.GetDeviceInfo(request, timeout=10)
+                return {
+                    "device_id": response.device_id,
+                    "firmware_version": response.firmware_version,
+                    "runtime_version": response.runtime_version,
+                    "active_agent": response.active_agent,
+                    "memory_usage": response.memory_usage,
+                    "uptime": response.uptime,
+                }
+            except Exception as e:
+                print(f"Failed to get device info via gRPC: {e}")
+                return None
+        else:
+            response = self.send_serial_command("INFO")
+            if response and response[0] == 0:
+                # Parse device info from response
+                try:
+                    info_data = response[1:]
+                    return json.loads(info_data.decode("ascii"))
+                except Exception as e:
+                    print(f"Failed to parse device info: {e}")
+                    return None
+            return None
+
+    def rollback_agent(self) -> bool:
+        """Rollback to previous agent"""
+        print("Rolling back to previous agent...")
+
+        if self.grpc_stub:
+            try:
+                request = edgeplug_pb2.RollbackRequest()
+                response = self.grpc_stub.Rollback(request, timeout=10)
+                if response.status == edgeplug_pb2.ROLLBACK_STATUS_SUCCESS:
+                    print("Rollback successful")
+                    return True
+                else:
+                    print(f"Rollback failed: {response.error_message}")
+                    return False
+            except Exception as e:
+                print(f"gRPC rollback failed: {e}")
+                return False
+        else:
+            response = self.send_serial_command("ROLLBACK")
+            if response and response[0] == 0:
+                print("Rollback successful")
+                return True
+            else:
+                print("Rollback failed")
+                return False
+
+    def get_update_status(self) -> Optional[Dict[str, Any]]:
+        """Get update status"""
+        if self.grpc_stub:
+            try:
+                request = edgeplug_pb2.GetUpdateStatusRequest()
+                response = self.grpc_stub.GetUpdateStatus(request, timeout=10)
+                return {
+                    "update_in_progress": response.update_in_progress,
+                    "active_slot": response.active_slot,
+                    "successful_updates": response.successful_updates,
+                    "failed_updates": response.failed_updates,
+                    "last_update_time": response.last_update_time,
+                }
+            except Exception as e:
+                print(f"Failed to get update status via gRPC: {e}")
+                return None
+        else:
+            response = self.send_serial_command("STATUS")
+            if response and response[0] == 0:
+                try:
+                    status_data = response[1:]
+                    return json.loads(status_data.decode("ascii"))
+                except Exception as e:
+                    print(f"Failed to parse update status: {e}")
+                    return None
+            return None
+
+
+def main():
+    parser = argparse.ArgumentParser(description="EdgePlug CLI Updater Tool")
+    parser.add_argument(
+        "--device", required=True, help="Device connection (serial port or IP:port)"
+    )
+    parser.add_argument("--agent", help="Agent binary file to deploy")
+    parser.add_argument("--manifest", help="Agent manifest file")
+    parser.add_argument(
+        "--timeout", type=int, default=30, help="Connection timeout in seconds"
+    )
+    parser.add_argument("--info", action="store_true", help="Get device information")
+    parser.add_argument("--status", action="store_true", help="Get update status")
+    parser.add_argument(
+        "--rollback", action="store_true", help="Rollback to previous agent"
+    )
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
+
+    args = parser.parse_args()
+
+    # Create updater
+    updater = EdgePlugUpdater(args.device, args.timeout)
+
+    try:
+        # Connect to device
+        if not updater.connect():
+            print("Failed to connect to device")
+            return 1
+
+        # Get device info
+        if args.info:
+            info = updater.get_device_info()
+            if info:
+                print("Device Information:")
+                for key, value in info.items():
+                    print(f"  {key}: {value}")
+            else:
+                print("Failed to get device information")
+                return 1
+
+        # Get update status
+        elif args.status:
+            status = updater.get_update_status()
+            if status:
+                print("Update Status:")
+                for key, value in status.items():
+                    print(f"  {key}: {value}")
+            else:
+                print("Failed to get update status")
+                return 1
+
+        # Rollback agent
+        elif args.rollback:
+            if updater.rollback_agent():
+                print("Rollback completed successfully")
+            else:
+                print("Rollback failed")
+                return 1
+
+        # Deploy agent
+        elif args.agent and args.manifest:
+            if not os.path.exists(args.agent):
+                print(f"Agent file not found: {args.agent}")
+                return 1
+
+            if not os.path.exists(args.manifest):
+                print(f"Manifest file not found: {args.manifest}")
+                return 1
+
+            print(f"Deploying agent: {args.agent}")
+            print(f"Manifest: {args.manifest}")
+            print(f"Device: {args.device}")
+
+            if updater.deploy_agent(args.agent, args.manifest):
+                print("Deployment completed successfully")
+
+                # Wait a moment and check status
+                time.sleep(2)
+                status = updater.get_update_status()
+                if status:
+                    print("Final Status:")
+                    for key, value in status.items():
+                        print(f"  {key}: {value}")
+            else:
+                print("Deployment failed")
+                return 1
+
+        else:
+            parser.print_help()
+            return 1
+
+    except KeyboardInterrupt:
+        print("\nOperation cancelled by user")
+        return 1
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return 1
+
+    finally:
+        updater.disconnect()
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

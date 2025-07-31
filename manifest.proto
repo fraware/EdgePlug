@@ -1,0 +1,899 @@
+syntax = "proto3";
+
+package edgeplug;
+
+import "google/protobuf/timestamp.proto";
+
+// Agent manifest for cryptographic verification and safety validation
+message AgentManifest {
+  // Agent identity and metadata
+  AgentIdentity identity = 1;
+  
+  // Version information
+  VersionInfo version = 2;
+  
+  // Safety specifications and invariants
+  SafetySpec safety = 3;
+  
+  // Resource requirements
+  ResourceRequirements resources = 4;
+  
+  // Cryptographic signatures
+  repeated Signature signatures = 5;
+  
+  // Deployment configuration
+  DeploymentConfig deployment = 6;
+}
+
+// Agent identity information
+message AgentIdentity {
+  // Unique agent identifier (UUID v4)
+  string agent_id = 1;
+  
+  // Human-readable name
+  string name = 2;
+  
+  // Agent description
+  string description = 3;
+  
+  // Vendor information
+  VendorInfo vendor = 4;
+  
+  // Agent type/category
+  AgentType type = 5;
+  
+  // Tags for categorization
+  repeated string tags = 6;
+}
+
+// Vendor information
+message VendorInfo {
+  // Vendor name
+  string name = 1;
+  
+  // Vendor ID (for marketplace)
+  string vendor_id = 2;
+  
+  // Contact information
+  string contact_email = 3;
+  
+  // Vendor website
+  string website = 4;
+  
+  // Vendor public key for signature verification
+  bytes public_key = 5;
+}
+
+// Agent type enumeration
+enum AgentType {
+  AGENT_TYPE_UNSPECIFIED = 0;
+  AGENT_TYPE_VOLTAGE_EVENT = 1;
+  AGENT_TYPE_CURRENT_MONITOR = 2;
+  AGENT_TYPE_POWER_QUALITY = 3;
+  AGENT_TYPE_FAULT_DETECTION = 4;
+  AGENT_TYPE_PREDICTIVE_MAINTENANCE = 5;
+  AGENT_TYPE_OPTIMIZATION = 6;
+}
+
+// Version information
+message VersionInfo {
+  // Semantic version (major.minor.patch)
+  string semantic_version = 1;
+  
+  // Build number
+  uint32 build_number = 2;
+  
+  // Build timestamp
+  google.protobuf.Timestamp build_timestamp = 3;
+  
+  // Git commit hash
+  string git_commit = 4;
+  
+  // Build environment
+  string build_environment = 5;
+  
+  // Release notes
+  string release_notes = 6;
+  
+  // Compatibility matrix
+  repeated CompatibilityInfo compatibility = 7;
+}
+
+// Compatibility information
+message CompatibilityInfo {
+  // Runtime version
+  string runtime_version = 1;
+  
+  // Hardware platform
+  string hardware_platform = 2;
+  
+  // Minimum firmware version
+  string min_firmware_version = 3;
+  
+  // Maximum firmware version
+  string max_firmware_version = 4;
+}
+
+// Safety specifications
+message SafetySpec {
+  // Safety level (IEC 61508 SIL levels)
+  SafetyLevel safety_level = 1;
+  
+  // Input validation rules
+  repeated InputValidationRule input_validation = 2;
+  
+  // Output constraints
+  repeated OutputConstraint output_constraints = 3;
+  
+  // Invariant specifications
+  repeated InvariantSpec invariants = 4;
+  
+  // Fail-safe behavior
+  FailSafeBehavior fail_safe = 5;
+  
+  // Safety certification
+  repeated SafetyCertification certifications = 6;
+}
+
+// Safety level enumeration
+enum SafetyLevel {
+  SAFETY_LEVEL_UNSPECIFIED = 0;
+  SAFETY_LEVEL_SIL_0 = 1;  // No safety requirements
+  SAFETY_LEVEL_SIL_1 = 2;  // Low safety requirements
+  SAFETY_LEVEL_SIL_2 = 3;  // Medium safety requirements
+  SAFETY_LEVEL_SIL_3 = 4;  // High safety requirements
+  SAFETY_LEVEL_SIL_4 = 5;  // Very high safety requirements
+}
+
+// Input validation rule
+message InputValidationRule {
+  // Input name
+  string input_name = 1;
+  
+  // Data type
+  DataType data_type = 2;
+  
+  // Range constraints
+  RangeConstraint range = 3;
+  
+  // Rate limiting
+  RateLimit rate_limit = 4;
+  
+  // Quality requirements
+  QualityRequirement quality = 5;
+}
+
+// Data type enumeration
+enum DataType {
+  DATA_TYPE_UNSPECIFIED = 0;
+  DATA_TYPE_FLOAT32 = 1;
+  DATA_TYPE_FLOAT64 = 2;
+  DATA_TYPE_INT8 = 3;
+  DATA_TYPE_INT16 = 4;
+  DATA_TYPE_INT32 = 5;
+  DATA_TYPE_INT64 = 6;
+  DATA_TYPE_UINT8 = 7;
+  DATA_TYPE_UINT16 = 8;
+  DATA_TYPE_UINT32 = 9;
+  DATA_TYPE_UINT64 = 10;
+  DATA_TYPE_BOOL = 11;
+  DATA_TYPE_STRING = 12;
+}
+
+// Range constraint
+message RangeConstraint {
+  // Minimum value
+  double min_value = 1;
+  
+  // Maximum value
+  double max_value = 2;
+  
+  // Allowed values (for discrete types)
+  repeated double allowed_values = 3;
+  
+  // Default value
+  double default_value = 4;
+}
+
+// Rate limiting
+message RateLimit {
+  // Maximum samples per second
+  uint32 max_samples_per_second = 1;
+  
+  // Maximum burst size
+  uint32 max_burst_size = 2;
+  
+  // Time window for rate limiting
+  uint32 time_window_seconds = 3;
+}
+
+// Quality requirement
+message QualityRequirement {
+  // Minimum quality score (0.0 to 1.0)
+  float min_quality_score = 1;
+  
+  // Maximum age of data (seconds)
+  uint32 max_age_seconds = 2;
+  
+  // Required data source reliability
+  float min_reliability = 3;
+}
+
+// Output constraint
+message OutputConstraint {
+  // Output name
+  string output_name = 1;
+  
+  // Data type
+  DataType data_type = 2;
+  
+  // Range constraints
+  RangeConstraint range = 3;
+  
+  // Rate limiting
+  RateLimit rate_limit = 4;
+  
+  // Safety bounds
+  SafetyBounds safety_bounds = 5;
+}
+
+// Safety bounds for outputs
+message SafetyBounds {
+  // Critical minimum value
+  double critical_min = 1;
+  
+  // Critical maximum value
+  double critical_max = 2;
+  
+  // Warning minimum value
+  double warning_min = 3;
+  
+  // Warning maximum value
+  double warning_max = 4;
+  
+  // Fail-safe value
+  double fail_safe_value = 5;
+}
+
+// Invariant specification
+message InvariantSpec {
+  // Invariant name
+  string name = 1;
+  
+  // Invariant description
+  string description = 2;
+  
+  // Invariant expression (EBNF grammar)
+  string expression = 3;
+  
+  // Severity level
+  InvariantSeverity severity = 4;
+  
+  // Timeout for invariant evaluation (microseconds)
+  uint32 timeout_us = 5;
+  
+  // Priority (higher numbers = higher priority)
+  uint32 priority = 6;
+}
+
+// Invariant severity enumeration
+enum InvariantSeverity {
+  INVARIANT_SEVERITY_UNSPECIFIED = 0;
+  INVARIANT_SEVERITY_INFO = 1;
+  INVARIANT_SEVERITY_WARNING = 2;
+  INVARIANT_SEVERITY_ERROR = 3;
+  INVARIANT_SEVERITY_CRITICAL = 4;
+}
+
+// Fail-safe behavior
+message FailSafeBehavior {
+  // Action to take on safety violation
+  FailSafeAction action = 1;
+  
+  // Timeout for fail-safe activation (milliseconds)
+  uint32 timeout_ms = 2;
+  
+  // Recovery behavior
+  RecoveryBehavior recovery = 3;
+  
+  // Notification settings
+  NotificationSettings notifications = 4;
+}
+
+// Fail-safe action enumeration
+enum FailSafeAction {
+  FAIL_SAFE_ACTION_UNSPECIFIED = 0;
+  FAIL_SAFE_ACTION_NONE = 1;
+  FAIL_SAFE_ACTION_STOP = 2;
+  FAIL_SAFE_ACTION_RESET = 3;
+  FAIL_SAFE_ACTION_DEFAULT = 4;
+  FAIL_SAFE_ACTION_SAFE_MODE = 5;
+}
+
+// Recovery behavior
+message RecoveryBehavior {
+  // Automatic recovery enabled
+  bool auto_recovery = 1;
+  
+  // Recovery timeout (seconds)
+  uint32 recovery_timeout_seconds = 2;
+  
+  // Maximum recovery attempts
+  uint32 max_recovery_attempts = 3;
+  
+  // Recovery backoff strategy
+  BackoffStrategy backoff_strategy = 4;
+}
+
+// Backoff strategy
+message BackoffStrategy {
+  // Initial delay (seconds)
+  uint32 initial_delay_seconds = 1;
+  
+  // Maximum delay (seconds)
+  uint32 max_delay_seconds = 2;
+  
+  // Backoff multiplier
+  float multiplier = 3;
+}
+
+// Notification settings
+message NotificationSettings {
+  // Enable notifications
+  bool enabled = 1;
+  
+  // Notification channels
+  repeated NotificationChannel channels = 2;
+  
+  // Notification level
+  NotificationLevel level = 3;
+}
+
+// Notification channel
+message NotificationChannel {
+  // Channel type
+  NotificationChannelType type = 1;
+  
+  // Channel configuration
+  string config = 2;
+}
+
+// Notification channel type
+enum NotificationChannelType {
+  NOTIFICATION_CHANNEL_UNSPECIFIED = 0;
+  NOTIFICATION_CHANNEL_LOG = 1;
+  NOTIFICATION_CHANNEL_EMAIL = 2;
+  NOTIFICATION_CHANNEL_SMS = 3;
+  NOTIFICATION_CHANNEL_WEBHOOK = 4;
+  NOTIFICATION_CHANNEL_OPC_UA = 5;
+  NOTIFICATION_CHANNEL_MODBUS = 6;
+}
+
+// Notification level
+enum NotificationLevel {
+  NOTIFICATION_LEVEL_UNSPECIFIED = 0;
+  NOTIFICATION_LEVEL_DEBUG = 1;
+  NOTIFICATION_LEVEL_INFO = 2;
+  NOTIFICATION_LEVEL_WARNING = 3;
+  NOTIFICATION_LEVEL_ERROR = 4;
+  NOTIFICATION_LEVEL_CRITICAL = 5;
+}
+
+// Safety certification
+message SafetyCertification {
+  // Certification type
+  string certification_type = 1;
+  
+  // Certification body
+  string certifying_body = 2;
+  
+  // Certification number
+  string certification_number = 3;
+  
+  // Certification date
+  google.protobuf.Timestamp certification_date = 4;
+  
+  // Expiration date
+  google.protobuf.Timestamp expiration_date = 5;
+  
+  // Certification scope
+  string scope = 6;
+}
+
+// Resource requirements
+message ResourceRequirements {
+  // Memory requirements
+  MemoryRequirements memory = 1;
+  
+  // CPU requirements
+  CPURequirements cpu = 2;
+  
+  // Storage requirements
+  StorageRequirements storage = 3;
+  
+  // Network requirements
+  NetworkRequirements network = 4;
+  
+  // Power requirements
+  PowerRequirements power = 5;
+}
+
+// Memory requirements
+message MemoryRequirements {
+  // Flash memory (bytes)
+  uint32 flash_bytes = 1;
+  
+  // SRAM memory (bytes)
+  uint32 sram_bytes = 2;
+  
+  // Stack size (bytes)
+  uint32 stack_bytes = 3;
+  
+  // Heap size (bytes)
+  uint32 heap_bytes = 4;
+}
+
+// CPU requirements
+message CPURequirements {
+  // Minimum CPU frequency (MHz)
+  uint32 min_frequency_mhz = 1;
+  
+  // Maximum CPU usage (%)
+  float max_cpu_usage_percent = 2;
+  
+  // Required CPU features
+  repeated string required_features = 3;
+}
+
+// Storage requirements
+message StorageRequirements {
+  // Model storage (bytes)
+  uint32 model_storage_bytes = 1;
+  
+  // Data storage (bytes)
+  uint32 data_storage_bytes = 2;
+  
+  // Log storage (bytes)
+  uint32 log_storage_bytes = 3;
+}
+
+// Network requirements
+message NetworkRequirements {
+  // Required bandwidth (bits per second)
+  uint64 required_bandwidth_bps = 1;
+  
+  // Maximum latency (milliseconds)
+  uint32 max_latency_ms = 2;
+  
+  // Required protocols
+  repeated string required_protocols = 3;
+}
+
+// Power requirements
+message PowerRequirements {
+  // Idle power consumption (milliwatts)
+  uint32 idle_power_mw = 1;
+  
+  // Active power consumption (milliwatts)
+  uint32 active_power_mw = 2;
+  
+  // Peak power consumption (milliwatts)
+  uint32 peak_power_mw = 3;
+}
+
+// Cryptographic signature
+message Signature {
+  // Signature algorithm
+  SignatureAlgorithm algorithm = 1;
+  
+  // Public key (for verification)
+  bytes public_key = 2;
+  
+  // Signature data
+  bytes signature_data = 3;
+  
+  // Signature timestamp
+  google.protobuf.Timestamp timestamp = 4;
+  
+  // Signer identity
+  string signer_identity = 5;
+  
+  // Signature scope
+  SignatureScope scope = 6;
+}
+
+// Signature algorithm enumeration
+enum SignatureAlgorithm {
+  SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
+  SIGNATURE_ALGORITHM_ED25519 = 1;
+  SIGNATURE_ALGORITHM_ECDSA_P256 = 2;
+  SIGNATURE_ALGORITHM_RSA_2048 = 3;
+  SIGNATURE_ALGORITHM_RSA_4096 = 4;
+}
+
+// Signature scope enumeration
+enum SignatureScope {
+  SIGNATURE_SCOPE_UNSPECIFIED = 0;
+  SIGNATURE_SCOPE_MANIFEST = 1;
+  SIGNATURE_SCOPE_MODEL = 2;
+  SIGNATURE_SCOPE_CODE = 3;
+  SIGNATURE_SCOPE_FULL = 4;
+}
+
+// Deployment configuration
+message DeploymentConfig {
+  // Deployment mode
+  DeploymentMode mode = 1;
+  
+  // Update strategy
+  UpdateStrategy update_strategy = 2;
+  
+  // Rollback configuration
+  RollbackConfig rollback = 3;
+  
+  // Monitoring configuration
+  MonitoringConfig monitoring = 4;
+  
+  // Resource limits
+  ResourceLimits resource_limits = 5;
+}
+
+// Deployment mode enumeration
+enum DeploymentMode {
+  DEPLOYMENT_MODE_UNSPECIFIED = 0;
+  DEPLOYMENT_MODE_STANDALONE = 1;
+  DEPLOYMENT_MODE_DISTRIBUTED = 2;
+  DEPLOYMENT_MODE_CLOUD_EDGE = 3;
+}
+
+// Update strategy
+message UpdateStrategy {
+  // Update type
+  UpdateType type = 1;
+  
+  // Rolling update configuration
+  RollingUpdateConfig rolling_update = 2;
+  
+  // Blue-green deployment configuration
+  BlueGreenConfig blue_green = 3;
+  
+  // Canary deployment configuration
+  CanaryConfig canary = 4;
+}
+
+// Update type enumeration
+enum UpdateType {
+  UPDATE_TYPE_UNSPECIFIED = 0;
+  UPDATE_TYPE_IMMEDIATE = 1;
+  UPDATE_TYPE_ROLLING = 2;
+  UPDATE_TYPE_BLUE_GREEN = 3;
+  UPDATE_TYPE_CANARY = 4;
+}
+
+// Rolling update configuration
+message RollingUpdateConfig {
+  // Maximum unavailable replicas
+  uint32 max_unavailable = 1;
+  
+  // Maximum surge replicas
+  uint32 max_surge = 2;
+  
+  // Update timeout (seconds)
+  uint32 timeout_seconds = 3;
+}
+
+// Blue-green deployment configuration
+message BlueGreenConfig {
+  // Traffic split percentage
+  uint32 traffic_split_percent = 1;
+  
+  // Switchover timeout (seconds)
+  uint32 switchover_timeout_seconds = 2;
+  
+  // Health check configuration
+  HealthCheckConfig health_check = 3;
+}
+
+// Canary deployment configuration
+message CanaryConfig {
+  // Canary percentage
+  uint32 canary_percentage = 1;
+  
+  // Canary duration (seconds)
+  uint32 canary_duration_seconds = 2;
+  
+  // Success criteria
+  SuccessCriteria success_criteria = 3;
+}
+
+// Health check configuration
+message HealthCheckConfig {
+  // Health check endpoint
+  string endpoint = 1;
+  
+  // Health check interval (seconds)
+  uint32 interval_seconds = 2;
+  
+  // Health check timeout (seconds)
+  uint32 timeout_seconds = 3;
+  
+  // Failure threshold
+  uint32 failure_threshold = 4;
+  
+  // Success threshold
+  uint32 success_threshold = 5;
+}
+
+// Success criteria
+message SuccessCriteria {
+  // Error rate threshold (%)
+  float error_rate_threshold = 1;
+  
+  // Latency threshold (milliseconds)
+  uint32 latency_threshold_ms = 2;
+  
+  // Throughput threshold
+  uint64 throughput_threshold = 3;
+}
+
+// Rollback configuration
+message RollbackConfig {
+  // Automatic rollback enabled
+  bool auto_rollback = 1;
+  
+  // Rollback triggers
+  repeated RollbackTrigger triggers = 2;
+  
+  // Rollback timeout (seconds)
+  uint32 timeout_seconds = 3;
+}
+
+// Rollback trigger
+message RollbackTrigger {
+  // Trigger type
+  RollbackTriggerType type = 1;
+  
+  // Trigger threshold
+  float threshold = 2;
+  
+  // Trigger window (seconds)
+  uint32 window_seconds = 3;
+}
+
+// Rollback trigger type
+enum RollbackTriggerType {
+  ROLLBACK_TRIGGER_UNSPECIFIED = 0;
+  ROLLBACK_TRIGGER_ERROR_RATE = 1;
+  ROLLBACK_TRIGGER_LATENCY = 2;
+  ROLLBACK_TRIGGER_CPU_USAGE = 3;
+  ROLLBACK_TRIGGER_MEMORY_USAGE = 4;
+  ROLLBACK_TRIGGER_SAFETY_VIOLATION = 5;
+}
+
+// Monitoring configuration
+message MonitoringConfig {
+  // Metrics collection
+  MetricsConfig metrics = 1;
+  
+  // Logging configuration
+  LoggingConfig logging = 2;
+  
+  // Alerting configuration
+  AlertingConfig alerting = 3;
+  
+  // Tracing configuration
+  TracingConfig tracing = 4;
+}
+
+// Metrics configuration
+message MetricsConfig {
+  // Metrics endpoint
+  string endpoint = 1;
+  
+  // Metrics interval (seconds)
+  uint32 interval_seconds = 2;
+  
+  // Metrics retention (days)
+  uint32 retention_days = 3;
+  
+  // Custom metrics
+  repeated CustomMetric custom_metrics = 4;
+}
+
+// Custom metric
+message CustomMetric {
+  // Metric name
+  string name = 1;
+  
+  // Metric type
+  MetricType type = 2;
+  
+  // Metric description
+  string description = 3;
+  
+  // Metric labels
+  repeated string labels = 4;
+}
+
+// Metric type enumeration
+enum MetricType {
+  METRIC_TYPE_UNSPECIFIED = 0;
+  METRIC_TYPE_COUNTER = 1;
+  METRIC_TYPE_GAUGE = 2;
+  METRIC_TYPE_HISTOGRAM = 3;
+  METRIC_TYPE_SUMMARY = 4;
+}
+
+// Logging configuration
+message LoggingConfig {
+  // Log level
+  LogLevel level = 1;
+  
+  // Log format
+  LogFormat format = 2;
+  
+  // Log destination
+  string destination = 3;
+  
+  // Log retention (days)
+  uint32 retention_days = 4;
+}
+
+// Log level enumeration
+enum LogLevel {
+  LOG_LEVEL_UNSPECIFIED = 0;
+  LOG_LEVEL_DEBUG = 1;
+  LOG_LEVEL_INFO = 2;
+  LOG_LEVEL_WARNING = 3;
+  LOG_LEVEL_ERROR = 4;
+  LOG_LEVEL_CRITICAL = 5;
+}
+
+// Log format enumeration
+enum LogFormat {
+  LOG_FORMAT_UNSPECIFIED = 0;
+  LOG_FORMAT_TEXT = 1;
+  LOG_FORMAT_JSON = 2;
+  LOG_FORMAT_STRUCTURED = 3;
+}
+
+// Alerting configuration
+message AlertingConfig {
+  // Alert rules
+  repeated AlertRule alert_rules = 1;
+  
+  // Notification channels
+  repeated NotificationChannel notification_channels = 2;
+  
+  // Alert grouping
+  AlertGrouping grouping = 3;
+}
+
+// Alert rule
+message AlertRule {
+  // Rule name
+  string name = 1;
+  
+  // Rule expression
+  string expression = 2;
+  
+  // Rule severity
+  AlertSeverity severity = 3;
+  
+  // Rule duration
+  uint32 duration_seconds = 4;
+  
+  // Rule labels
+  repeated string labels = 5;
+}
+
+// Alert severity enumeration
+enum AlertSeverity {
+  ALERT_SEVERITY_UNSPECIFIED = 0;
+  ALERT_SEVERITY_INFO = 1;
+  ALERT_SEVERITY_WARNING = 2;
+  ALERT_SEVERITY_ERROR = 3;
+  ALERT_SEVERITY_CRITICAL = 4;
+}
+
+// Alert grouping
+message AlertGrouping {
+  // Group by labels
+  repeated string group_by_labels = 1;
+  
+  // Group timeout (seconds)
+  uint32 group_timeout_seconds = 2;
+  
+  // Repeat interval (seconds)
+  uint32 repeat_interval_seconds = 3;
+}
+
+// Tracing configuration
+message TracingConfig {
+  // Tracing enabled
+  bool enabled = 1;
+  
+  // Sampling rate (0.0 to 1.0)
+  float sampling_rate = 2;
+  
+  // Tracing endpoint
+  string endpoint = 3;
+  
+  // Custom spans
+  repeated CustomSpan custom_spans = 4;
+}
+
+// Custom span
+message CustomSpan {
+  // Span name
+  string name = 1;
+  
+  // Span description
+  string description = 2;
+  
+  // Span attributes
+  repeated string attributes = 3;
+}
+
+// Resource limits
+message ResourceLimits {
+  // CPU limits
+  CPULimits cpu = 1;
+  
+  // Memory limits
+  MemoryLimits memory = 2;
+  
+  // Storage limits
+  StorageLimits storage = 3;
+  
+  // Network limits
+  NetworkLimits network = 4;
+}
+
+// CPU limits
+message CPULimits {
+  // CPU request (millicores)
+  uint32 request_millicores = 1;
+  
+  // CPU limit (millicores)
+  uint32 limit_millicores = 2;
+  
+  // CPU burst limit
+  uint32 burst_limit_millicores = 3;
+}
+
+// Memory limits
+message MemoryLimits {
+  // Memory request (bytes)
+  uint64 request_bytes = 1;
+  
+  // Memory limit (bytes)
+  uint64 limit_bytes = 2;
+  
+  // Memory burst limit (bytes)
+  uint64 burst_limit_bytes = 3;
+}
+
+// Storage limits
+message StorageLimits {
+  // Storage request (bytes)
+  uint64 request_bytes = 1;
+  
+  // Storage limit (bytes)
+  uint64 limit_bytes = 2;
+  
+  // Storage burst limit (bytes)
+  uint64 burst_limit_bytes = 3;
+}
+
+// Network limits
+message NetworkLimits {
+  // Bandwidth limit (bits per second)
+  uint64 bandwidth_limit_bps = 1;
+  
+  // Connection limit
+  uint32 connection_limit = 2;
+  
+  // Rate limit (requests per second)
+  uint32 rate_limit_rps = 3;
+} 
