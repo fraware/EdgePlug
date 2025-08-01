@@ -2,20 +2,13 @@
 
 EdgePlug drops ready-made ML intelligence into legacy PLCs with a single firmware call. Grid operators stuck with brittle ladder logic can now swap in a spec-driven 'VoltageEventAgent v1.0' as easily as loading a function block.
 
+<p align="center">
+  <img src=".github/assets/EdgePlug1.png" alt="EdgePlug Logo" width="300"/>
+</p>
+
 ## Project Overview
 
 EdgePlug converts fixed-function hardware into updatable, modular intelligence—so the grid evolves at software speed.
-
-### Key Features
-
-- **ML Agent Runtime**: ≤32KB flash / ≤4KB SRAM on Cortex-M4F
-- **Hot-Swap Updates**: Agent updates without RTOS reflashing
-- **Cryptographic Security**: Signed manifests for identity/version/safety
-- **Multi-Protocol Support**: OPC-UA, Modbus RTU/TCP, GPIO
-- **Modern Web UI**: React-based interface with real-time monitoring
-- **Digital Twin Canvas**: Drag-and-drop device configuration
-- **Agent Marketplace**: Third-party agent ecosystem with certification
-- **Safety First**: Fail-closed behavior with invariant checking
 
 ### Architecture
 
