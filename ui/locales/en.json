@@ -147,7 +147,14 @@
     "forbidden": "Access forbidden",
     "timeout": "Request timeout",
     "offline": "No internet connection",
-    "retry": "Please try again"
+    "retry": "Please try again",
+    "guardTrip": "Guard Trip Alert",
+    "guardTripTitle": "System Protection Triggered",
+    "guardTripDescription": "{{count}} {{type}} errors detected. System protection has been activated to prevent damage.",
+    "guardTripWarning": "System Protection Active",
+    "guardTripRecommendation": "Review the error logs and address the root cause before resuming normal operation.",
+    "muteDuration": "Mute Duration",
+    "muteFor": "Mute for {{duration}} minutes"
   },
   "performance": {
     "latency": "Latency",

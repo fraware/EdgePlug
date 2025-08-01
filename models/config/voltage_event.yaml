@@ -1,0 +1,209 @@
+# Voltage Event Detection Model Configuration
+# EdgePlug ML Pipeline - Quality Gates & Constraints
+
+model:
+  name: "VoltageEventAgent"
+  version: "1.0.0"
+  description: "Real-time voltage event detection for industrial power systems"
+  
+  # Architecture Constraints
+  architecture:
+    type: "1D_CNN"
+    input_shape: [128, 2]  # 128 samples, voltage + current
+    output_classes: 4       # Normal, Sag, Swell, Interruption
+    max_parameters: 15000   # Target for ≤16KB binary
+    max_layers: 6
+    
+  # Quality Gates
+  quality_gates:
+    precision:
+      target: 0.98
+      tolerance: 0.01
+    inference_time:
+      target: 500  # microseconds
+      tolerance: 50
+    model_size:
+      target: 16384  # 16KB in bytes
+      tolerance: 1024
+    memory_usage:
+      target: 4096   # 4KB SRAM
+      tolerance: 512
+    adversarial_robustness:
+      target: 0.85   # 85% robust to adversarial examples
+      tolerance: 0.05
+
+# Training Configuration
+training:
+  # Reproducibility
+  seed: 42
+  deterministic: true
+  mixed_precision: false  # Ensure reproducibility
+  
+  # Data
+  batch_size: 32
+  epochs: 100
+  validation_split: 0.2
+  test_split: 0.1
+  
+  # Optimization
+  optimizer:
+    type: "adam"
+    learning_rate: 0.001
+    beta_1: 0.9
+    beta_2: 0.999
+    epsilon: 1e-7
+  
+  # Regularization
+  regularization:
+    dropout_rate: 0.3
+    l2_factor: 1e-4
+    early_stopping_patience: 10
+  
+  # Data Augmentation
+  augmentation:
+    noise_factor: 0.05
+    time_shift: 0.1
+    amplitude_scale: 0.9
+
+# Quantization Configuration
+quantization:
+  method: "post_training"
+  target_platform: "cortex_m4"
+  target_frequency: 80  # MHz
+  
+  # Quantization Parameters
+  weight_bits: 8
+  activation_bits: 8
+  bias_bits: 32
+  
+  # Calibration
+  calibration_samples: 1000
+  calibration_method: "min_max"
+  
+  # CMSIS-NN Specific
+  cmsis_nn:
+    enable_optimizations: true
+    use_dsp_instructions: true
+    optimize_for_size: true
+
+# Validation Configuration
+validation:
+  # Pilot Dataset
+  pilot_dataset:
+    path: "data/pilot_dataset.csv"
+    size: 10000
+    classes: [0, 1, 2, 3]  # Normal, Sag, Swell, Interruption
+  
+  # Hardware Testing
+  hardware_testing:
+    target_board: "STM32F407"
+    clock_frequency: 80  # MHz
+    memory_constraints:
+      flash: 16384  # 16KB
+      sram: 4096    # 4KB
+  
+  # Adversarial Testing
+  adversarial:
+    framework: "deepxplore"
+    attack_types: ["fgsm", "pgd", "carlini_wagner"]
+    epsilon_range: [0.01, 0.1, 0.2]
+    max_iterations: 1000
+
+# Reproducibility Configuration
+reproducibility:
+  # Hash Verification
+  hash_verification: true
+  hash_algorithm: "sha256"
+  
+  # Double-run Verification
+  double_run:
+    enabled: true
+    tolerance: 1e-6
+  
+  # Environment Pinning
+  environment:
+    pin_versions: true
+    create_venv: true
+    requirements_file: "requirements.txt"
+
+# Deployment Configuration
+deployment:
+  # Binary Generation
+  binary:
+    format: "cmsis_nn"
+    compression: true
+    strip_debug: true
+  
+  # Integration
+  integration:
+    runtime: "edgeplug_runtime"
+    manifest_format: "protobuf"
+    signature_algorithm: "ed25519"
+  
+  # Testing
+  testing:
+    unit_tests: true
+    integration_tests: true
+    performance_tests: true
+
+# Experiment Tracking
+experiment_tracking:
+  mlflow:
+    enabled: true
+    tracking_uri: "file:./mlruns"
+    experiment_name: "voltage_event_detection"
+  
+  wandb:
+    enabled: false
+    project: "edgeplug-ml"
+  
+  # Metrics to Track
+  metrics:
+    - "precision"
+    - "recall"
+    - "f1_score"
+    - "inference_time"
+    - "model_size"
+    - "memory_usage"
+    - "adversarial_robustness"
+    - "reproducibility_hash"
+
+# Data Configuration
+data:
+  # Synthetic Dataset Generation
+  synthetic:
+    enabled: true
+    num_samples: 50000
+    noise_levels: [0.01, 0.05, 0.1]
+    event_types: ["sag", "swell", "interruption"]
+    
+  # Real Dataset (if available)
+  real:
+    enabled: false
+    path: "data/real_voltage_data.csv"
+    
+  # Preprocessing
+  preprocessing:
+    normalization: "z_score"
+    window_size: 128
+    overlap: 0.5
+    sampling_rate: 1000  # Hz
+
+# Safety Configuration
+safety:
+  # Runtime Validation
+  runtime_validation:
+    enabled: true
+    bounds_checking: true
+    nan_detection: true
+  
+  # Failure Mode Analysis
+  failure_modes:
+    document: true
+    mitigation_strategies: true
+  
+  # Security
+  security:
+    model_signing: true
+    integrity_checks: true
+    access_control: true 

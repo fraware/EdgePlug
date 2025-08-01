@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\build\CMakeFiles\936bba37dfe3a2fbcf3f075a2ca312c9\memory_check.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\build\CMakeFiles\memory_check" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{8A317B0B-92D9-342B-9741-A1A8DF94693A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

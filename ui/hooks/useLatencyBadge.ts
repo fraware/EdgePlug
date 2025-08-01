@@ -202,6 +202,7 @@ export const useLatencyBadge = (options: {
         }
       };
     }
+    return undefined;
   }, [autoReset, resetInterval, resetMetrics]);
 
   // Update interval for continuous monitoring
@@ -223,6 +224,7 @@ export const useLatencyBadge = (options: {
 
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [state.isActive, updateInterval, getTier]);
 
   return {

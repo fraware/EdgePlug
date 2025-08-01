@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-08-01 13:40:19",
+  "total_tests": 10,
+  "failures": 9,
+  "errors": 0,
+  "success_rate": 10.0,
+  "details": {
+    "failures": [
+      {
+        "test": "test_01_system_startup (__main__.EdgePlugIntegrationTest.test_01_system_startup)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 63, in test_01_system_startup\n    self.assertEqual(\nAssertionError: 404 != 200 : Runtime not responding\n"
+      },
+      {
+        "test": "test_02_frontend_functionality (__main__.EdgePlugIntegrationTest.test_02_frontend_functionality)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 88, in test_02_frontend_functionality\n    self.assertEqual(response.status_code, 200)\nAssertionError: 404 != 200\n"
+      },
+      {
+        "test": "test_03_backend_api (__main__.EdgePlugIntegrationTest.test_03_backend_api)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 102, in test_03_backend_api\n    self.assertIn(\nAssertionError: 404 not found in [200, 401]\n"
+      },
+      {
+        "test": "test_04_runtime_communication (__main__.EdgePlugIntegrationTest.test_04_runtime_communication)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 133, in test_04_runtime_communication\n    self.assertEqual(response.status_code, 200)\nAssertionError: 404 != 200\n"
+      },
+      {
+        "test": "test_05_data_flow (__main__.EdgePlugIntegrationTest.test_05_data_flow)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 175, in test_05_data_flow\n    self.assertEqual(response.status_code, 200)\nAssertionError: 404 != 200\n"
+      },
+      {
+        "test": "test_07_security_verification (__main__.EdgePlugIntegrationTest.test_07_security_verification)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 246, in test_07_security_verification\n    self.assertEqual(response.status_code, 200)\nAssertionError: 404 != 200\n"
+      },
+      {
+        "test": "test_08_error_handling (__main__.EdgePlugIntegrationTest.test_08_error_handling)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 314, in test_08_error_handling\n    self.assertIn(response.status_code, [400, 422])\nAssertionError: 404 not found in [400, 422]\n"
+      },
+      {
+        "test": "test_09_component_integration (__main__.EdgePlugIntegrationTest.test_09_component_integration)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 337, in test_09_component_integration\n    self.assertIn(response.status_code, [200, 201])\nAssertionError: 404 not found in [200, 201]\n"
+      },
+      {
+        "test": "test_10_system_monitoring (__main__.EdgePlugIntegrationTest.test_10_system_monitoring)",
+        "error": "Traceback (most recent call last):\n  File \"C:\\Users\\mateo\\OneDrive\\Documents\\Documents Mat\u00e9o\\AFTER STANFORD\\HC Fellow\\EdgePlug\\tests\\integration_test.py\", line 370, in test_10_system_monitoring\n    self.assertEqual(response.status_code, 200)\nAssertionError: 404 != 200\n"
+      }
+    ],
+    "errors": []
+  }
+}

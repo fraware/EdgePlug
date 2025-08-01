@@ -191,7 +191,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ onDragStart }) => {
             key={node.type}
             className="flex items-center gap-2 p-2 rounded border border-gray-200 cursor-grab hover:bg-gray-50"
             draggable
-            onDragStart={(event) => onDragStart(event, node.type)}
+            onDragStart={(event: React.DragEvent) => onDragStart(event, node.type)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -208,7 +208,7 @@ const Toolbox: React.FC<ToolboxProps> = ({ onDragStart }) => {
 interface SignalMapDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  nodeData?: CustomNodeData;
+  nodeData: CustomNodeData | undefined;
 }
 
 const SignalMapDrawer: React.FC<SignalMapDrawerProps> = ({ isOpen, onClose, nodeData }) => {

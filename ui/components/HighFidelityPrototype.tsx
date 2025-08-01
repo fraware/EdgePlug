@@ -601,7 +601,7 @@ export const MarketplaceHifi: React.FC<MarketplaceHifiProps> = ({
                 <ul className="text-xs text-ep-gray-600 space-y-1">
                   <li>• ≤500µs inference time</li>
                   <li>• 99.9% uptime</li>
-                  <li>• <1ms actuation delay</li>
+                  <li>• &lt;1ms actuation delay</li>
                   <li>• Real-time alerts</li>
                 </ul>
               </div>

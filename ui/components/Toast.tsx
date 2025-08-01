@@ -135,6 +135,8 @@ const Toast: React.FC<ToastProps> = ({
             />
           </svg>
         );
+      default:
+        return null;
     }
   };
 

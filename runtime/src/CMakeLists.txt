@@ -5,6 +5,9 @@ set(RUNTIME_SOURCES
     preprocess.c
     infer.c
     actuator.c
+    hotswap.c
+    bootloader_patch.c
+    crypto_impl.c
 )
 
 # Create runtime library
@@ -26,21 +29,36 @@ target_include_directories(edgeplug_runtime PUBLIC
 )
 
 # Compiler flags for embedded systems
-target_compile_options(edgeplug_runtime PRIVATE
-    -Wall
-    -Wextra
-    -Werror
-    -O2
-    -fstack-protector-strong
-    -ffunction-sections
-    -fdata-sections
-)
-
-# Linker flags for embedded systems
-target_link_options(edgeplug_runtime PRIVATE
-    -Wl,--gc-sections
-    -Wl,--strip-all
-)
+if(MSVC)
+    target_compile_options(edgeplug_runtime PRIVATE
+        /W3
+        /WX
+        /O2
+        /GS
+    )
+    
+    # Linker flags for MSVC
+    target_link_options(edgeplug_runtime PRIVATE
+        /OPT:REF
+        /OPT:ICF
+    )
+else()
+    target_compile_options(edgeplug_runtime PRIVATE
+        -Wall
+        -Wextra
+        -Werror
+        -O2
+        -fstack-protector-strong
+        -ffunction-sections
+        -fdata-sections
+    )
+    
+    # Linker flags for embedded systems
+    target_link_options(edgeplug_runtime PRIVATE
+        -Wl,--gc-sections
+        -Wl,--strip-all
+    )
+endif()
 
 # Platform-specific configurations
 if(CMAKE_SYSTEM_NAME STREQUAL "STM32")
@@ -72,6 +90,8 @@ endif()
 
 # Coverage support
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_options(edgeplug_runtime PRIVATE --coverage)
-    target_link_options(edgeplug_runtime PRIVATE --coverage)
+    if(NOT MSVC)
+        target_compile_options(edgeplug_runtime PRIVATE --coverage)
+        target_link_options(edgeplug_runtime PRIVATE --coverage)
+    endif()
 endif() 

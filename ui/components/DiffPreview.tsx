@@ -361,8 +361,8 @@ function generateDiff(oldData: any, newData: any, maxDepth: number, currentPath:
       });
     } else {
       const keyChanges = generateDiff(oldValue, newValue, maxDepth, keyPath);
-      if (keyChanges.length === 1 && keyChanges[0].type === 'unchanged') {
-        changes.push(keyChanges[0]);
+      if (keyChanges.length === 1 && keyChanges[0]?.type === 'unchanged') {
+        changes.push(keyChanges[0]!);
       } else {
         changes.push({
           type: 'modified',

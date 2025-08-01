@@ -10,18 +10,31 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # Compiler flags for embedded systems with size optimization
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -Os -ffunction-sections -fdata-sections")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Os -ffunction-sections -fdata-sections")
+if(MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3 /WX /O2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /WX /O2")
+else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -Os -ffunction-sections -fdata-sections")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Os -ffunction-sections -fdata-sections")
+endif()
 
 # MISRA-C 2023 compliance flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong")
+if(NOT MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong")
+endif()
 
 # Memory budget verification
 set(FLASH_SIZE_LIMIT 32768)  # 32KB
 set(SRAM_SIZE_LIMIT 4096)    # 4KB
 
-# Find required packages
-find_package(PkgConfig REQUIRED)
+# Find required packages (optional for Windows)
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+    # Use pkg-config if available
+else()
+    # Fallback for Windows without pkg-config
+    message(STATUS "PkgConfig not found, using fallback configuration")
+endif()
 
 # Include directories
 include_directories(
@@ -65,6 +78,8 @@ add_custom_target(cppcheck
 
 # Coverage target
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --coverage")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+    if(NOT MSVC)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --coverage")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+    endif()
 endif() 

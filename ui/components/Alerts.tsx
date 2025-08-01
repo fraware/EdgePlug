@@ -519,7 +519,7 @@ export const Alerts: React.FC<AlertsProps> = ({ className, onAlertAction }) => {
     const total = alerts.length;
     const critical = alerts.filter(a => a.severity === 'critical').length;
     const warning = alerts.filter(a => a.severity === 'warning').length;
-    const active = alerts.filter(a => !alert.resolved).length;
+    const active = alerts.filter(a => !a.resolved).length;
 
     return { total, critical, warning, active };
   }, [alerts]);

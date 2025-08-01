@@ -7,6 +7,7 @@
 
 #include "edgeplug_runtime.h"
 #include "agent_loader.h"
+#include "crypto_impl.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -247,79 +248,16 @@ static void calculate_hash(const uint8_t* data, size_t data_size, uint8_t* hash)
  */
 static bool verify_signature(const uint8_t* data, size_t data_size, 
                            const uint8_t* signature, const uint8_t* public_key) {
-    // Verify signature length
-    if (!data || !signature || !public_key) {
-        return false;
-    }
-    
-    // Calculate hash of data
-    uint8_t hash[64];  // SHA-512 output
-    calculate_hash(data, data_size, hash);
-    
-    // Extract signature components
-    uint8_t r[32], s[32];
-    memcpy(r, signature, 32);
-    memcpy(s, signature + 32, 32);
-    
-    // Verify signature using Ed25519 algorithm
-    // This is a simplified verification - production should use optimized crypto library
-    
-    // 1. Decode public key point
-    ed25519_point_t A;
-    // Simplified point decoding (production should use proper curve arithmetic)
-    memset(&A, 0, sizeof(A));
-    
-    // 2. Calculate challenge hash
-    uint8_t challenge_data[96];
-    memcpy(challenge_data, r, 32);
-    memcpy(challenge_data + 32, public_key, 32);
-    memcpy(challenge_data + 64, hash, 32);
-    
-    uint8_t challenge_hash[64];
-    calculate_hash(challenge_data, 96, challenge_hash);
-    
-    // 3. Verify signature equation: R = s*G + c*A
-    // Simplified verification (production should use proper curve arithmetic)
-    
-    // For embedded systems, we'll use a simplified verification
-    // that checks the basic structure and hash consistency
-    bool valid_structure = true;
-    
-    // Check that s is in valid range (0 < s < L where L is curve order)
-    for (int i = 0; i < 32; i++) {
-        if (s[i] != 0) {
-            break;
-        }
-        if (i == 31) {
-            valid_structure = false;  // s is zero
-        }
-    }
-    
-    // Check that r is in valid range
-    for (int i = 0; i < 32; i++) {
-        if (r[i] != 0) {
-            break;
-        }
-        if (i == 31) {
-            valid_structure = false;  // r is zero
-        }
-    }
-    
-    // For production, replace this with proper Ed25519 verification
-    // using a trusted crypto library like mbedTLS or wolfSSL
-    return valid_structure;
+    // Use production-ready cryptographic implementation
+    return crypto_verify_ed25519(data, data_size, signature, public_key);
 }
 
 /**
  * @brief Calculate SHA-512 hash
  */
 static void calculate_hash(const uint8_t* data, size_t data_size, uint8_t* hash) {
-    // TODO: Implement SHA-512
-    // For now, use simple hash for development
-    memset(hash, 0, 64);
-    for (size_t i = 0; i < data_size && i < 64; i++) {
-        hash[i] = data[i] ^ 0xAA;
-    }
+    // Use production-ready SHA-512 implementation
+    crypto_sha512(data, data_size, hash);
 }
 
 edgeplug_status_t agent_loader_load(const uint8_t* cbor_data, size_t data_size,

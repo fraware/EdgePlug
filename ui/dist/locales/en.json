@@ -1,0 +1,175 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "close": "Close",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+        "refresh": "Refresh",
+        "retry": "Retry",
+        "offline": "You are currently offline",
+        "online": "Back online"
+    },
+    "navigation": {
+        "dashboard": "Dashboard",
+        "canvas": "Canvas",
+        "marketplace": "Marketplace",
+        "fleet": "Fleet",
+        "alerts": "Alerts",
+        "settings": "Settings",
+        "documentation": "Documentation"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "overview": "Overview",
+        "activeDevices": "Active Devices",
+        "totalAlerts": "Total Alerts",
+        "systemHealth": "System Health",
+        "performance": "Performance",
+        "recentActivity": "Recent Activity"
+    },
+    "canvas": {
+        "title": "Canvas",
+        "workspace": "Workspace",
+        "toolbox": "Toolbox",
+        "properties": "Properties",
+        "addNode": "Add Node",
+        "connectNodes": "Connect Nodes",
+        "deleteNode": "Delete Node",
+        "nodeTypes": {
+            "plc": "PLC",
+            "transformer": "Transformer",
+            "breaker": "Circuit Breaker",
+            "sensor": "Sensor",
+            "actuator": "Actuator"
+        }
+    },
+    "marketplace": {
+        "title": "Marketplace",
+        "searchPlaceholder": "Search components...",
+        "categories": {
+            "all": "All",
+            "plc": "PLCs",
+            "transformer": "Transformers",
+            "breaker": "Circuit Breakers",
+            "sensor": "Sensors",
+            "actuator": "Actuators"
+        },
+        "filters": {
+            "price": "Price",
+            "rating": "Rating",
+            "certified": "Certified Only",
+            "vendor": "Vendor"
+        },
+        "item": {
+            "downloads": "downloads",
+            "rating": "rating",
+            "size": "size",
+            "version": "version",
+            "lastUpdated": "Last updated",
+            "install": "Install",
+            "preview": "Preview"
+        }
+    },
+    "fleet": {
+        "title": "Fleet Management",
+        "devices": "Devices",
+        "groups": "Groups",
+        "deployments": "Deployments",
+        "monitoring": "Monitoring",
+        "device": {
+            "status": "Status",
+            "online": "Online",
+            "offline": "Offline",
+            "error": "Error",
+            "lastSeen": "Last seen",
+            "location": "Location",
+            "type": "Type"
+        }
+    },
+    "alerts": {
+        "title": "Alerts",
+        "active": "Active",
+        "acknowledged": "Acknowledged",
+        "resolved": "Resolved",
+        "severity": {
+            "critical": "Critical",
+            "warning": "Warning",
+            "info": "Information",
+            "success": "Success"
+        },
+        "category": {
+            "system": "System",
+            "security": "Security",
+            "performance": "Performance",
+            "maintenance": "Maintenance"
+        },
+        "actions": {
+            "acknowledge": "Acknowledge",
+            "resolve": "Resolve",
+            "viewDetails": "View Details"
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "general": "General",
+        "appearance": "Appearance",
+        "notifications": "Notifications",
+        "security": "Security",
+        "about": "About",
+        "theme": {
+            "light": "Light",
+            "dark": "Dark",
+            "auto": "Auto"
+        },
+        "language": "Language",
+        "accessibility": {
+            "title": "Accessibility",
+            "highContrast": "High Contrast",
+            "reducedMotion": "Reduced Motion",
+            "largeText": "Large Text"
+        }
+    },
+    "errors": {
+        "networkError": "Network error occurred",
+        "serverError": "Server error occurred",
+        "notFound": "Page not found",
+        "unauthorized": "Unauthorized access",
+        "forbidden": "Access forbidden",
+        "timeout": "Request timeout",
+        "offline": "No internet connection",
+        "retry": "Please try again"
+    },
+    "performance": {
+        "latency": "Latency",
+        "excellent": "Excellent",
+        "good": "Good",
+        "fair": "Fair",
+        "poor": "Poor",
+        "critical": "Critical",
+        "metrics": {
+            "min": "Min",
+            "max": "Max",
+            "avg": "Average",
+            "p95": "95th Percentile",
+            "p99": "99th Percentile"
+        }
+    },
+    "accessibility": {
+        "skipToContent": "Skip to main content",
+        "skipToNavigation": "Skip to navigation",
+        "skipToFooter": "Skip to footer",
+        "focusIndicator": "Focus indicator",
+        "screenReader": "Screen reader support",
+        "keyboardNavigation": "Keyboard navigation"
+    }
+}

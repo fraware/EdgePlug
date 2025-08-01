@@ -1,0 +1,45 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { AppShell } from './AppShell';
+import { SkeletonText } from './Skeleton';
+const Dashboard = () => (_jsxs("div", { className: "p-8", children: [_jsx("h2", { className: "text-2xl font-bold mb-4", children: "Dashboard" }), _jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8", children: [
+                { title: "Total Agents", value: "24", change: "+12%", color: "blue" },
+                { title: "Active Devices", value: "18", change: "+5%", color: "green" },
+                { title: "Alerts", value: "3", change: "-2", color: "yellow" },
+                { title: "Uptime", value: "99.8%", change: "+0.1%", color: "purple" },
+            ].map((stat, index) => (_jsxs("div", { className: "bg-white p-6 rounded-lg border border-gray-200", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: stat.title }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: stat.value })] }), _jsx("div", { className: `w-12 h-12 bg-${stat.color}-100 rounded-full flex items-center justify-center`, children: _jsx("div", { className: `w-6 h-6 bg-${stat.color}-500 rounded` }) })] }), _jsx("p", { className: "text-sm text-green-600 mt-2", children: stat.change })] }, index))) }), _jsxs("div", { className: "bg-white rounded-lg border border-gray-200", children: [_jsx("div", { className: "p-6 border-b border-gray-200", children: _jsx("h3", { className: "text-lg font-semibold", children: "Recent Activity" }) }), _jsx("div", { className: "p-6", children: _jsx("div", { className: "space-y-4", children: Array.from({ length: 5 }).map((_, index) => (_jsxs("div", { className: "flex items-center space-x-4", children: [_jsx("div", { className: "w-8 h-8 bg-gray-200 rounded-full" }), _jsxs("div", { className: "flex-1", children: [_jsxs("p", { className: "text-sm font-medium", children: ["Agent ", index + 1, " deployed"] }), _jsx("p", { className: "text-xs text-gray-500", children: "2 minutes ago" })] }), _jsx("span", { className: "text-xs bg-green-100 text-green-800 px-2 py-1 rounded", children: "Success" })] }, index))) }) })] })] }));
+const Agents = () => (_jsxs("div", { className: "p-8", children: [_jsxs("div", { className: "flex items-center justify-between mb-6", children: [_jsx("h2", { className: "text-2xl font-bold", children: "Agents" }), _jsx("button", { className: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600", children: "Add Agent" })] }), _jsxs("div", { className: "bg-white rounded-lg border border-gray-200", children: [_jsx("div", { className: "p-6 border-b border-gray-200", children: _jsx("h3", { className: "text-lg font-semibold", children: "Agent Library" }) }), _jsx("div", { className: "p-6", children: _jsx(SkeletonText, { lines: 8 }) })] })] }));
+const Fleet = () => (_jsxs("div", { className: "p-8", children: [_jsxs("div", { className: "flex items-center justify-between mb-6", children: [_jsx("h2", { className: "text-2xl font-bold", children: "Fleet Management" }), _jsx("button", { className: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600", children: "Add Device" })] }), _jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: Array.from({ length: 6 }).map((_, index) => (_jsxs("div", { className: "bg-white p-6 rounded-lg border border-gray-200", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsxs("h3", { className: "font-semibold", children: ["Device ", index + 1] }), _jsx("div", { className: "w-2 h-2 bg-green-500 rounded-full" })] }), _jsxs("p", { className: "text-gray-600 text-sm mb-4", children: ["PLC-", String(index + 1).padStart(3, '0'), " \u2022 Online"] }), _jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "flex justify-between text-sm", children: [_jsx("span", { className: "text-gray-500", children: "Uptime" }), _jsx("span", { className: "font-medium", children: "99.8%" })] }), _jsxs("div", { className: "flex justify-between text-sm", children: [_jsx("span", { className: "text-gray-500", children: "Last Update" }), _jsx("span", { className: "font-medium", children: "2 min ago" })] })] })] }, index))) })] }));
+const Alerts = () => (_jsxs("div", { className: "p-8", children: [_jsxs("div", { className: "flex items-center justify-between mb-6", children: [_jsx("h2", { className: "text-2xl font-bold", children: "Alerts" }), _jsx("button", { className: "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600", children: "View All" })] }), _jsxs("div", { className: "bg-white rounded-lg border border-gray-200", children: [_jsx("div", { className: "p-6 border-b border-gray-200", children: _jsx("h3", { className: "text-lg font-semibold", children: "Recent Alerts" }) }), _jsx("div", { className: "p-6", children: _jsx("div", { className: "space-y-4", children: [
+                            { type: "warning", title: "High CPU Usage", device: "PLC-001", time: "5 min ago" },
+                            { type: "error", title: "Connection Lost", device: "PLC-003", time: "12 min ago" },
+                            { type: "info", title: "Update Available", device: "PLC-002", time: "1 hour ago" },
+                        ].map((alert, index) => (_jsxs("div", { className: "flex items-center space-x-4 p-4 border border-gray-100 rounded", children: [_jsx("div", { className: `w-3 h-3 rounded-full bg-${alert.type === 'error' ? 'red' : alert.type === 'warning' ? 'yellow' : 'blue'}-500` }), _jsxs("div", { className: "flex-1", children: [_jsx("p", { className: "font-medium", children: alert.title }), _jsxs("p", { className: "text-sm text-gray-500", children: [alert.device, " \u2022 ", alert.time] })] }), _jsx("button", { className: "text-sm text-blue-600 hover:text-blue-800", children: "View" })] }, index))) }) })] })] }));
+const Settings = () => (_jsxs("div", { className: "p-8", children: [_jsx("h2", { className: "text-2xl font-bold mb-6", children: "Settings" }), _jsxs("div", { className: "bg-white rounded-lg border border-gray-200", children: [_jsx("div", { className: "p-6 border-b border-gray-200", children: _jsx("h3", { className: "text-lg font-semibold", children: "Application Settings" }) }), _jsx("div", { className: "p-6", children: _jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Theme" }), _jsxs("select", { className: "w-full px-3 py-2 border border-gray-300 rounded", children: [_jsx("option", { children: "Light" }), _jsx("option", { children: "Dark" }), _jsx("option", { children: "Auto" })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Language" }), _jsxs("select", { className: "w-full px-3 py-2 border border-gray-300 rounded", children: [_jsx("option", { children: "English" }), _jsx("option", { children: "Spanish" }), _jsx("option", { children: "French" })] })] }), _jsx("div", { children: _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", className: "mr-2" }), _jsx("span", { className: "text-sm", children: "Enable notifications" })] }) })] }) })] })] }));
+const Navigation = () => {
+    const location = useLocation();
+    const navItems = [
+        { path: '/', label: 'Dashboard', icon: '📊' },
+        { path: '/agents', label: 'Agents', icon: '🤖' },
+        { path: '/fleet', label: 'Fleet', icon: '🚀' },
+        { path: '/alerts', label: 'Alerts', icon: '⚠️' },
+        { path: '/settings', label: 'Settings', icon: '⚙️' },
+    ];
+    return (_jsx("div", { className: "flex flex-col items-center py-4", children: navItems.map((item) => (_jsx(Link, { to: item.path, className: `w-8 h-8 mb-4 rounded flex items-center justify-center text-lg ${location.pathname === item.path
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'}`, title: item.label, children: item.icon }, item.path))) }));
+};
+export const AppRouter = () => {
+    return (_jsx(Router, { children: _jsx(AppShell, { leftRailWidth: 40, inspectorWidth: "30%", showLeftRail: true, showTopBar: true, showInspector: true, children: _jsxs(Routes, { children: [_jsx(Route, { path: "/", element: _jsx(Dashboard, {}) }), _jsx(Route, { path: "/agents", element: _jsx(Agents, {}) }), _jsx(Route, { path: "/fleet", element: _jsx(Fleet, {}) }), _jsx(Route, { path: "/alerts", element: _jsx(Alerts, {}) }), _jsx(Route, { path: "/settings", element: _jsx(Settings, {}) })] }) }) }));
+};
+export const useNavigation = () => {
+    const location = useLocation();
+    const navigate = (path) => {
+        window.location.href = path;
+    };
+    return {
+        currentPath: location.pathname,
+        navigate,
+    };
+};
+//# sourceMappingURL=Router.js.map

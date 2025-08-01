@@ -1,0 +1,10 @@
+^C:\USERS\MATEO\ONEDRIVE\DOCUMENTS\DOCUMENTS MATÉO\AFTER STANFORD\HC FELLOW\EDGEPLUG\RUNTIME\BUILD\CMAKEFILES\936BBA37DFE3A2FBCF3F075A2CA312C9\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/mateo/OneDrive/Documents/Documents Matéo/AFTER STANFORD/HC Fellow/EdgePlug/runtime" "-BC:/Users/mateo/OneDrive/Documents/Documents Matéo/AFTER STANFORD/HC Fellow/EdgePlug/runtime/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/mateo/OneDrive/Documents/Documents Matéo/AFTER STANFORD/HC Fellow/EdgePlug/runtime/build/EdgePlug_Runtime.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

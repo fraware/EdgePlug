@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\edgeplug_runtime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\agent_loader.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\preprocess.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\infer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\actuator.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\hotswap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\bootloader_patch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\crypto_impl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\mateo\OneDrive\Documents\Documents Matéo\AFTER STANFORD\HC Fellow\EdgePlug\runtime\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{EA8769D9-CF0F-3E5C-941A-25BDE59BB855}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

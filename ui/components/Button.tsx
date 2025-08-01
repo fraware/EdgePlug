@@ -8,7 +8,7 @@ export interface ButtonProps {
   loading?: boolean;
   icon?: React.ReactNode;
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: 'button' | 'submit' | 'reset';
   className?: string;
   'aria-label'?: string;
@@ -155,4 +155,5 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
+export { Button };
 export default Button; 
