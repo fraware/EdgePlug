@@ -3,7 +3,7 @@
 EdgePlug drops ready-made ML intelligence into legacy PLCs with a single firmware call. Grid operators stuck with brittle ladder logic can now swap in a spec-driven 'VoltageEventAgent v1.0' as easily as loading a function block.
 
 <p align="center">
-  <img src=".github/assets/EdgePlug1.png" alt="EdgePlug Logo" width="300"/>
+  <img src="asset.png" alt="EdgePlug Logo" width="300"/>
 </p>
 
 ## Project Overview
