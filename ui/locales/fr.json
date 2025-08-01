@@ -1,0 +1,175 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "refresh": "Actualiser",
+    "retry": "Réessayer",
+    "offline": "Vous êtes actuellement hors ligne",
+    "online": "De retour en ligne"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "canvas": "Canvas",
+    "marketplace": "Boutique",
+    "fleet": "Flotte",
+    "alerts": "Alertes",
+    "settings": "Paramètres",
+    "documentation": "Documentation"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "overview": "Aperçu",
+    "activeDevices": "Appareils actifs",
+    "totalAlerts": "Total des alertes",
+    "systemHealth": "Santé du système",
+    "performance": "Performance",
+    "recentActivity": "Activité récente"
+  },
+  "canvas": {
+    "title": "Canvas",
+    "workspace": "Espace de travail",
+    "toolbox": "Boîte à outils",
+    "properties": "Propriétés",
+    "addNode": "Ajouter un nœud",
+    "connectNodes": "Connecter les nœuds",
+    "deleteNode": "Supprimer le nœud",
+    "nodeTypes": {
+      "plc": "API",
+      "transformer": "Transformateur",
+      "breaker": "Disjoncteur",
+      "sensor": "Capteur",
+      "actuator": "Actionneur"
+    }
+  },
+  "marketplace": {
+    "title": "Boutique",
+    "searchPlaceholder": "Rechercher des composants...",
+    "categories": {
+      "all": "Tout",
+      "plc": "APIs",
+      "transformer": "Transformateurs",
+      "breaker": "Disjoncteurs",
+      "sensor": "Capteurs",
+      "actuator": "Actionneurs"
+    },
+    "filters": {
+      "price": "Prix",
+      "rating": "Évaluation",
+      "certified": "Certifiés uniquement",
+      "vendor": "Fournisseur"
+    },
+    "item": {
+      "downloads": "téléchargements",
+      "rating": "évaluation",
+      "size": "taille",
+      "version": "version",
+      "lastUpdated": "Dernière mise à jour",
+      "install": "Installer",
+      "preview": "Aperçu"
+    }
+  },
+  "fleet": {
+    "title": "Gestion de flotte",
+    "devices": "Appareils",
+    "groups": "Groupes",
+    "deployments": "Déploiements",
+    "monitoring": "Surveillance",
+    "device": {
+      "status": "Statut",
+      "online": "En ligne",
+      "offline": "Hors ligne",
+      "error": "Erreur",
+      "lastSeen": "Dernière vue",
+      "location": "Emplacement",
+      "type": "Type"
+    }
+  },
+  "alerts": {
+    "title": "Alertes",
+    "active": "Actives",
+    "acknowledged": "Reconnues",
+    "resolved": "Résolues",
+    "severity": {
+      "critical": "Critique",
+      "warning": "Avertissement",
+      "info": "Information",
+      "success": "Succès"
+    },
+    "category": {
+      "system": "Système",
+      "security": "Sécurité",
+      "performance": "Performance",
+      "maintenance": "Maintenance"
+    },
+    "actions": {
+      "acknowledge": "Reconnaître",
+      "resolve": "Résoudre",
+      "viewDetails": "Voir les détails"
+    }
+  },
+  "settings": {
+    "title": "Paramètres",
+    "general": "Général",
+    "appearance": "Apparence",
+    "notifications": "Notifications",
+    "security": "Sécurité",
+    "about": "À propos",
+    "theme": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "auto": "Automatique"
+    },
+    "language": "Langue",
+    "accessibility": {
+      "title": "Accessibilité",
+      "highContrast": "Contraste élevé",
+      "reducedMotion": "Mouvement réduit",
+      "largeText": "Texte agrandi"
+    }
+  },
+  "errors": {
+    "networkError": "Erreur réseau survenue",
+    "serverError": "Erreur serveur survenue",
+    "notFound": "Page non trouvée",
+    "unauthorized": "Accès non autorisé",
+    "forbidden": "Accès interdit",
+    "timeout": "Délai d'attente dépassé",
+    "offline": "Aucune connexion Internet",
+    "retry": "Veuillez réessayer"
+  },
+  "performance": {
+    "latency": "Latence",
+    "excellent": "Excellent",
+    "good": "Bon",
+    "fair": "Correct",
+    "poor": "Mauvais",
+    "critical": "Critique",
+    "metrics": {
+      "min": "Min",
+      "max": "Max",
+      "avg": "Moyenne",
+      "p95": "95e centile",
+      "p99": "99e centile"
+    }
+  },
+  "accessibility": {
+    "skipToContent": "Passer au contenu principal",
+    "skipToNavigation": "Passer à la navigation",
+    "skipToFooter": "Passer au pied de page",
+    "focusIndicator": "Indicateur de focus",
+    "screenReader": "Support lecteur d'écran",
+    "keyboardNavigation": "Navigation au clavier"
+  }
+} 

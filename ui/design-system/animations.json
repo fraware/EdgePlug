@@ -1,0 +1,293 @@
+{
+  "animations": {
+    "drag_start": {
+      "v": "5.7.4",
+      "fr": 60,
+      "ip": 0,
+      "op": 30,
+      "w": 200,
+      "h": 200,
+      "nm": "Drag Start Animation",
+      "ddd": 0,
+      "assets": [],
+      "layers": [
+        {
+          "ddd": 0,
+          "ind": 1,
+          "ty": 4,
+          "nm": "Element",
+          "sr": 1,
+          "ks": {
+            "o": {
+              "a": 1,
+              "k": [
+                {
+                  "i": { "x": [0.833], "y": [0.833] },
+                  "o": { "x": [0.167], "y": [0.167] },
+                  "t": 0,
+                  "s": [100]
+                },
+                {
+                  "i": { "x": [0.833], "y": [0.833] },
+                  "o": { "x": [0.167], "y": [0.167] },
+                  "t": 15,
+                  "s": [80]
+                },
+                {
+                  "t": 30,
+                  "s": [100]
+                }
+              ]
+            },
+            "s": {
+              "a": 1,
+              "k": [
+                {
+                  "i": { "x": [0.833, 0.833, 0.833], "y": [0.833, 0.833, 0.833] },
+                  "o": { "x": [0.167, 0.167, 0.167], "y": [0.167, 0.167, 0.167] },
+                  "t": 0,
+                  "s": [100, 100, 100]
+                },
+                {
+                  "i": { "x": [0.833, 0.833, 0.833], "y": [0.833, 0.833, 0.833] },
+                  "o": { "x": [0.167, 0.167, 0.167], "y": [0.167, 0.167, 0.167] },
+                  "t": 15,
+                  "s": [105, 105, 100]
+                },
+                {
+                  "t": 30,
+                  "s": [100, 100, 100]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "hover_effect": {
+      "v": "5.7.4",
+      "fr": 60,
+      "ip": 0,
+      "op": 45,
+      "w": 200,
+      "h": 200,
+      "nm": "Hover Effect",
+      "ddd": 0,
+      "assets": [],
+      "layers": [
+        {
+          "ddd": 0,
+          "ind": 1,
+          "ty": 4,
+          "nm": "Border",
+          "sr": 1,
+          "ks": {
+            "o": {
+              "a": 1,
+              "k": [
+                {
+                  "i": { "x": [0.833], "y": [0.833] },
+                  "o": { "x": [0.167], "y": [0.167] },
+                  "t": 0,
+                  "s": [0]
+                },
+                {
+                  "i": { "x": [0.833], "y": [0.833] },
+                  "o": { "x": [0.167], "y": [0.167] },
+                  "t": 15,
+                  "s": [100]
+                },
+                {
+                  "t": 45,
+                  "s": [100]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "button_press": {
+      "v": "5.7.4",
+      "fr": 60,
+      "ip": 0,
+      "op": 20,
+      "w": 200,
+      "h": 200,
+      "nm": "Button Press",
+      "ddd": 0,
+      "assets": [],
+      "layers": [
+        {
+          "ddd": 0,
+          "ind": 1,
+          "ty": 4,
+          "nm": "Button",
+          "sr": 1,
+          "ks": {
+            "s": {
+              "a": 1,
+              "k": [
+                {
+                  "i": { "x": [0.833, 0.833, 0.833], "y": [0.833, 0.833, 0.833] },
+                  "o": { "x": [0.167, 0.167, 0.167], "y": [0.167, 0.167, 0.167] },
+                  "t": 0,
+                  "s": [100, 100, 100]
+                },
+                {
+                  "i": { "x": [0.833, 0.833, 0.833], "y": [0.833, 0.833, 0.833] },
+                  "o": { "x": [0.167, 0.167, 0.167], "y": [0.167, 0.167, 0.167] },
+                  "t": 10,
+                  "s": [95, 95, 100]
+                },
+                {
+                  "t": 20,
+                  "s": [100, 100, 100]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "loading_spinner": {
+      "v": "5.7.4",
+      "fr": 60,
+      "ip": 0,
+      "op": 120,
+      "w": 200,
+      "h": 200,
+      "nm": "Loading Spinner",
+      "ddd": 0,
+      "assets": [],
+      "layers": [
+        {
+          "ddd": 0,
+          "ind": 1,
+          "ty": 4,
+          "nm": "Spinner",
+          "sr": 1,
+          "ks": {
+            "r": {
+              "a": 1,
+              "k": [
+                {
+                  "i": { "x": [0.833], "y": [0.833] },
+                  "o": { "x": [0.167], "y": [0.167] },
+                  "t": 0,
+                  "s": [0]
+                },
+                {
+                  "t": 120,
+                  "s": [360]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "success_check": {
+      "v": "5.7.4",
+      "fr": 60,
+      "ip": 0,
+      "op": 60,
+      "w": 200,
+      "h": 200,
+      "nm": "Success Check",
+      "ddd": 0,
+      "assets": [],
+      "layers": [
+        {
+          "ddd": 0,
+          "ind": 1,
+          "ty": 4,
+          "nm": "Checkmark",
+          "sr": 1,
+          "ks": {
+            "o": {
+              "a": 1,
+              "k": [
+                {
+                  "i": { "x": [0.833], "y": [0.833] },
+                  "o": { "x": [0.167], "y": [0.167] },
+                  "t": 0,
+                  "s": [0]
+                },
+                {
+                  "i": { "x": [0.833], "y": [0.833] },
+                  "o": { "x": [0.167], "y": [0.167] },
+                  "t": 30,
+                  "s": [100]
+                },
+                {
+                  "t": 60,
+                  "s": [100]
+                }
+              ]
+            },
+            "s": {
+              "a": 1,
+              "k": [
+                {
+                  "i": { "x": [0.833, 0.833, 0.833], "y": [0.833, 0.833, 0.833] },
+                  "o": { "x": [0.167, 0.167, 0.167], "y": [0.167, 0.167, 0.167] },
+                  "t": 0,
+                  "s": [0, 0, 100]
+                },
+                {
+                  "i": { "x": [0.833, 0.833, 0.833], "y": [0.833, 0.833, 0.833] },
+                  "o": { "x": [0.167, 0.167, 0.167], "y": [0.167, 0.167, 0.167] },
+                  "t": 30,
+                  "s": [100, 100, 100]
+                },
+                {
+                  "t": 60,
+                  "s": [100, 100, 100]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "specifications": {
+    "drag_start": {
+      "duration": "500ms",
+      "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "description": "Element scales up slightly and reduces opacity when drag starts",
+      "use_case": "Dragging equipment from toolbox to canvas"
+    },
+    "hover_effect": {
+      "duration": "150ms",
+      "easing": "ease-out",
+      "description": "Border color changes and element gets subtle shadow",
+      "use_case": "Hovering over interactive elements"
+    },
+    "button_press": {
+      "duration": "200ms",
+      "easing": "cubic-bezier(0.4, 0, 0.6, 1)",
+      "description": "Button scales down slightly when pressed",
+      "use_case": "All button interactions"
+    },
+    "loading_spinner": {
+      "duration": "2000ms",
+      "easing": "linear",
+      "description": "Continuous rotation animation",
+      "use_case": "Loading states and data fetching"
+    },
+    "success_check": {
+      "duration": "1000ms",
+      "easing": "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+      "description": "Checkmark scales up with bounce effect",
+      "use_case": "Successful operations and confirmations"
+    }
+  },
+  "performance_targets": {
+    "frame_rate": 60,
+    "max_duration": "1000ms",
+    "memory_budget": "2MB per animation",
+    "cpu_budget": "5% max CPU usage"
+  }
+} 

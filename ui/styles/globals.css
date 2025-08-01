@@ -1,0 +1,245 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* EdgePlug Design System - Global Styles */
+
+@layer base {
+  /* Custom CSS Variables for Design Tokens */
+  :root {
+    /* Primary Colors */
+    --ep-primary-50: #eff6ff;
+    --ep-primary-100: #dbeafe;
+    --ep-primary-200: #bfdbfe;
+    --ep-primary-300: #93c5fd;
+    --ep-primary-400: #60a5fa;
+    --ep-primary-500: #3b82f6;
+    --ep-primary-600: #2563eb;
+    --ep-primary-700: #1d4ed8;
+    --ep-primary-800: #1e40af;
+    --ep-primary-900: #1e3a8a;
+
+    /* Secondary Colors */
+    --ep-secondary-50: #fff7ed;
+    --ep-secondary-100: #ffedd5;
+    --ep-secondary-200: #fed7aa;
+    --ep-secondary-300: #fdba74;
+    --ep-secondary-400: #fb923c;
+    --ep-secondary-500: #f97316;
+    --ep-secondary-600: #ea580c;
+    --ep-secondary-700: #c2410c;
+    --ep-secondary-800: #9a3412;
+    --ep-secondary-900: #7c2d12;
+
+    /* Semantic Colors */
+    --ep-success-500: #10b981;
+    --ep-warning-500: #f59e0b;
+    --ep-error-500: #ef4444;
+    --ep-neutral-500: #6b7280;
+
+    /* Typography */
+    --ep-font-sans: 'Inter', system-ui, sans-serif;
+    --ep-font-mono: 'JetBrains Mono', monospace;
+
+    /* Spacing (8pt grid) */
+    --ep-space-1: 4px;
+    --ep-space-2: 8px;
+    --ep-space-3: 12px;
+    --ep-space-4: 16px;
+    --ep-space-5: 20px;
+    --ep-space-6: 24px;
+    --ep-space-8: 32px;
+    --ep-space-10: 40px;
+    --ep-space-12: 48px;
+    --ep-space-16: 64px;
+    --ep-space-20: 80px;
+    --ep-space-24: 96px;
+    --ep-space-32: 128px;
+
+    /* Shadows */
+    --ep-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --ep-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --ep-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --ep-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --ep-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+    /* Border Radius */
+    --ep-radius-none: 0;
+    --ep-radius-sm: 2px;
+    --ep-radius-md: 4px;
+    --ep-radius-lg: 8px;
+    --ep-radius-xl: 12px;
+    --ep-radius-2xl: 16px;
+    --ep-radius-full: 9999px;
+
+    /* Animation */
+    --ep-transition-fast: 150ms ease-in-out;
+    --ep-transition-normal: 200ms ease-out;
+    --ep-transition-slow: 300ms ease-out;
+  }
+
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    :root {
+      --ep-primary-600: #1e40af;
+      --ep-secondary-600: #ea580c;
+      --ep-success-500: #059669;
+      --ep-warning-500: #d97706;
+      --ep-error-500: #dc2626;
+    }
+  }
+
+  /* Dark Mode */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ep-neutral-50: #111827;
+      --ep-neutral-100: #1f2937;
+      --ep-neutral-200: #374151;
+      --ep-neutral-300: #4b5563;
+      --ep-neutral-400: #6b7280;
+      --ep-neutral-500: #9ca3af;
+      --ep-neutral-600: #d1d5db;
+      --ep-neutral-700: #e5e7eb;
+      --ep-neutral-800: #f3f4f6;
+      --ep-neutral-900: #f9fafb;
+    }
+  }
+
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --ep-transition-fast: 0ms;
+      --ep-transition-normal: 0ms;
+      --ep-transition-slow: 0ms;
+    }
+  }
+
+  /* Base Styles */
+  html {
+    font-family: var(--ep-font-sans);
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4;
+  }
+
+  body {
+    margin: 0;
+    line-height: inherit;
+  }
+
+  /* Focus Styles */
+  *:focus {
+    outline: 2px solid var(--ep-primary-600);
+    outline-offset: 2px;
+  }
+
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* EdgePlug Component Styles */
+  .ep-button {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
+  }
+
+  .ep-button-primary {
+    @apply bg-ep-primary-600 text-white hover:bg-ep-primary-700;
+  }
+
+  .ep-button-secondary {
+    @apply bg-ep-neutral-100 text-ep-neutral-900 hover:bg-ep-neutral-200;
+  }
+
+  .ep-button-ghost {
+    @apply hover:bg-ep-neutral-100 hover:text-ep-neutral-900;
+  }
+
+  .ep-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .ep-badge-success {
+    @apply bg-ep-success-100 text-ep-success-800;
+  }
+
+  .ep-badge-warning {
+    @apply bg-ep-warning-100 text-ep-warning-800;
+  }
+
+  .ep-badge-error {
+    @apply bg-ep-error-100 text-ep-error-800;
+  }
+
+  .ep-badge-neutral {
+    @apply bg-ep-neutral-100 text-ep-neutral-800;
+  }
+
+  .ep-modal {
+    @apply fixed inset-0 z-50 flex items-center justify-center;
+  }
+
+  .ep-modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50;
+  }
+
+  .ep-modal-content {
+    @apply bg-white rounded-lg shadow-xl max-w-md w-full mx-4;
+  }
+
+  .ep-drawer {
+    @apply fixed inset-0 z-50 flex;
+  }
+
+  .ep-drawer-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50;
+  }
+
+  .ep-drawer-content {
+    @apply bg-white shadow-xl;
+  }
+
+  .ep-toast {
+    @apply fixed z-50 flex w-full max-w-sm flex-col gap-2;
+  }
+
+  .ep-tooltip {
+    @apply absolute z-50 px-3 py-2 text-sm bg-ep-neutral-900 text-white rounded-md shadow-md;
+  }
+}
+
+@layer utilities {
+  /* EdgePlug Utility Classes */
+  .ep-sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+
+  .ep-focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-ep-primary-600 focus:ring-offset-2;
+  }
+
+  .ep-transition {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .ep-animate-fade-in {
+    @apply animate-fade-in;
+  }
+
+  .ep-animate-slide-up {
+    @apply animate-slide-up;
+  }
+
+  .ep-animate-scale-in {
+    @apply animate-scale-in;
+  }
+} 

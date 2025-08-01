@@ -1,0 +1,54 @@
+name: Accessibility Testing
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  accessibility:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ui/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd ui
+        npm ci
+    
+    - name: Build application
+      run: |
+        cd ui
+        npm run build
+    
+    - name: Start application
+      run: |
+        cd ui
+        npm run demo &
+        sleep 30
+    
+    - name: Run accessibility tests
+      run: |
+        cd ui
+        npm run test:a11y
+    
+    - name: Run Playwright accessibility tests
+      run: |
+        cd ui
+        npx playwright test --config=playwright.config.ts --project=accessibility
+    
+    - name: Upload accessibility report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: accessibility-report
+        path: ui/accessibility-report/ 
